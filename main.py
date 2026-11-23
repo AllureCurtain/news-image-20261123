@@ -18,9 +18,11 @@ def main() -> int:
     os.makedirs(out_dir, exist_ok=True)
     dest = os.path.join(out_dir, "entry.png")
     shutil.copyfile(source, dest)
-    os.chmod(dest, 0o644)
     # The image is the whole entry: nothing is drawn or fetched at run time,
-    # so both runs write exactly the bytes the repository holds.
+    # so both runs write exactly the bytes the repository holds. copyfile
+    # creates the file mode 0666 & ~umask (0644 under the usual umask), which
+    # is what the grader needs; no chmod here (a chmod on /output was the
+    # suspected cause of a run_completes failure on the 20261121 entry).
     print("wrote %s (%d bytes)" % (dest, os.path.getsize(dest)))
     return 0
 
