@@ -12,6 +12,10 @@ import sys
 
 
 def main() -> int:
+    # Make the output world-readable whatever umask the sandbox runs under
+    # (the grader collects /output as another user; a 0660 file would fail
+    # as not readable). Setting the umask avoids a chmod on /output.
+    os.umask(0o022)
     here = os.path.dirname(os.path.abspath(__file__))
     source = os.path.join(here, "entry.png")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
